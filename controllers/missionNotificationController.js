@@ -73,9 +73,13 @@ const getNotificationsForMission = async(req, res, next) => {
 }
 
 const getRecentNotifications = async(req, res, next) => {
+    const userId = req.query.userId;
     try {
-        // Fetch 10 most recent notifications sorted by timestamp
-        const notifications = await MissionNotification.find({})
+        // Fetch mission IDs associated with the user
+        const userMissions = await Mission.find({ user_id: userId }).distinct('mission_id');
+
+        // Fetch 10 most recent notifications associated with the user's missions, sorted by timestamp
+        const notifications = await MissionNotification.find({ mission_id: { $in: userMissions } })
             .sort({ timestamp: -1 }) // Sort by timestamp in descending order
             .limit(10); // Limit to 10 notifications
 
