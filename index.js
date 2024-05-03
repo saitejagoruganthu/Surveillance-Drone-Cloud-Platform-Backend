@@ -6,17 +6,22 @@ const cookieParser=require('cookie-parser');
 const router=require('./routes');
 const http = require('http');
 const socketIo = require('socket.io');
+const { log } = require("console");
 
 dotenv.config();
 const app=express();
 const server = http.createServer(app);
+const isDev = process.env.NODE_ENV !== 'production';
+console.log(isDev);
 const corsOptions = {
-  origin: 'https://dronecloud.saitejagoruganthu.com',
+  // origin: 'https://dronecloud.saitejagoruganthu.com',
+  origin: isDev ? 'http://localhost:3000' : 'https://dronecloud.saitejagoruganthu.com',
   credentials: true,
 };
 const io = socketIo(server, {
   cors: {
-    origin: "https://dronecloud.saitejagoruganthu.com"
+    // origin: "https://dronecloud.saitejagoruganthu.com"
+    origin: isDev ? 'http://localhost:3000' : 'https://dronecloud.saitejagoruganthu.com',
   }
 });
 
@@ -36,7 +41,7 @@ app.use(cors(corsOptions));
 
 // Socket.io connection
 io.on('connection', (socket) => {
-  console.log('Client connected: ' + socket.id);
+  // console.log('Client connected: ' + socket.id);
 
   socket.on('joinMission', (mission_id) => {
     socket.join(mission_id);

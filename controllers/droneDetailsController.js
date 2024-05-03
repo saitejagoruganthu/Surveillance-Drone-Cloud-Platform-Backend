@@ -5,7 +5,7 @@ const countDrones=async(req,res,next)=>{
   let dronescount;
   try{
     dronescount= await Drone.count({});
-    console.log("Count of drones:",dronescount);
+    // console.log("Count of drones:",dronescount);
   }
   catch(err){
       console.log(err);

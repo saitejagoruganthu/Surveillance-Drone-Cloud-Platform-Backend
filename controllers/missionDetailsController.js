@@ -1,13 +1,14 @@
 const Mission=require('../models/missionDetailsModel');
 const Drone=require('../models/droneDetailsModel');
 const TrackingConfig = require('../models/missionTrackingConfigModel');
+const { v4: uuidv4 } = require('uuid');
 
 const addMission = async (req, res,next) => {
   try {
       const {
           drone_id,
           tenant_id,
-          mission_id,
+          // mission_id,
           mission_distance,
           mission_name,
           items,
@@ -18,6 +19,14 @@ const addMission = async (req, res,next) => {
           mission_start_time,
           mission_end_time
       } = req.body;
+
+      let mission_id = req.body.mission_id; // Get mission_id from request body
+      // console.log(mission_id);
+
+      // If mission_id is not provided in the request body, generate a new one for creating a new mission
+      if (!mission_id) {
+        mission_id = uuidv4();
+      }
 
       // Map items to mission_waypoints format
       const mission_waypoints = items.map(item => ({
@@ -91,7 +100,7 @@ const addMission = async (req, res,next) => {
     let missionscount;
     try{
       missionscount= await Mission.count({});
-      console.log("Count of missions:",missionscount);
+      // console.log("Count of missions:",missionscount);
     }
     catch(err){
         console.log(err);
