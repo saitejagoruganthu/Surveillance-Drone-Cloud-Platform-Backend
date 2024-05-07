@@ -14,7 +14,7 @@ const signup=async(req,res,next)=>{
         console.log(err);
     }
     if(existingUser){
-        return res.status(400).json({message:"User already exists"});
+        return res.status(400).json({message:"User Already Exists. Please Login"});
     }
     const hashedPassword=bcrypt.hashSync(password);
     const customer= new User({
@@ -33,9 +33,10 @@ const signup=async(req,res,next)=>{
         await customer.save();
     }catch (err){
         console.log(err);
+        return res.status(400).json({message:"Error While Registering the User"});
     }
 
-    return res.status(201).json({message:customer});
+    return res.status(201).json({message:"User Created Successfully"});
 }
 
 const login=async(req,res,next)=>{
